@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="espacio_1">4dp</dimen>
+    <dimen name="espacio_2">8dp</dimen>
+    <dimen name="espacio_3">16dp</dimen>
+    <dimen name="espacio_4">32dp</dimen>
+    <dimen name="espacio_5">64dp</dimen>
+
+
+</resources>

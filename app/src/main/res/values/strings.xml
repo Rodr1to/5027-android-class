@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Sistema5027</string>
+
+    <string name="frase">Vive, vi y vencí</string>
+    <string name="autor">Rodrigo</string>
+    <string name="saludo">Hola</string>
+    <string name="derechos">Todos los derechos reservados</string>
+    <string name="empezar">Empezar</string>
+    <string name="logo">Logo de la empresa</string>
+    <string name="title_activity_empezar">EmpezarActivity</string>
+    <string name="foto_empezar">Mujer joven comprando en el supermercado</string>
+    <string name="texto_empezar">¡Bienvenido a nuestra aplicación! Aquí encontrarás una gran variedad de productos al alcance de tu mano, con la comodidad de comprar de forma rápida, segura y sencilla. Queremos que disfrutes tu experiencia, descubras nuevas opciones y recibas todo lo que necesitas sin complicaciones.</string>
+    <string name="title_activity_inicio">Inicio</string>
+    <string name="title_activity_terminos">Términos y condiciones</string>
+    <string name="terminos_texto">
+        El uso de esta aplicación móvil implica la aceptación plena de los presentes términos y condiciones. Al acceder o registrarse en la plataforma, el usuario reconoce que ha leído, entendido y aceptado las disposiciones aquí señaladas. En caso de no estar de acuerdo, deberá abstenerse de utilizar el servicio. La tienda se reserva el derecho de modificar en cualquier momento las condiciones sin previo aviso, y será responsabilidad del usuario revisarlas periódicamente.
+\n\n
+La aplicación está destinada a facilitar la compra de productos de la tienda, brindando información actualizada sobre disponibilidad, precios, promociones y métodos de pago. Sin embargo, la exactitud de estos datos puede variar por errores tipográficos, actualizaciones tardías o cambios repentinos en inventario. En tales casos, la tienda se compromete a comunicar al usuario las modificaciones pertinentes antes de confirmar la compra.
+\n\n
+Las transacciones realizadas a través de la aplicación se sujetan a la disponibilidad de stock y a la verificación de los datos proporcionados por el usuario. La tienda se reserva el derecho de cancelar cualquier pedido en caso de inconsistencias, fraude, errores de precio u otras situaciones que afecten la operación. En dichos casos, se notificará al cliente y, de ser necesario, se procederá con la devolución del importe pagado.
+\n\n
+La aplicación recopila y procesa ciertos datos personales del usuario con el fin de brindar un mejor servicio. Esta información será tratada de forma confidencial, conforme a la legislación vigente en materia de protección de datos personales. El usuario acepta que dichos datos podrán ser utilizados para mejorar la experiencia de compra, enviar promociones personalizadas y fines estadísticos.
+\n\n
+El usuario se compromete a hacer un uso responsable de la aplicación, evitando conductas que puedan dañar el sistema, afectar a otros usuarios o vulnerar la seguridad de la plataforma. Asimismo, queda prohibido utilizar la aplicación con fines ilegales, fraudulentos o contrarios a la buena fe. Cualquier incumplimiento podrá derivar en la suspensión inmediata de la cuenta sin derecho a reclamos.
+\n\n
+Finalmente, la tienda no será responsable por fallos técnicos, interrupciones del servicio, errores en la red o cualquier circunstancia ajena a su control que impida el correcto funcionamiento de la aplicación. El uso de la plataforma implica que el usuario asume estos riesgos, reconociendo que la tienda hará sus mejores esfuerzos para garantizar la continuidad y seguridad del servicio.
+    </string>
+    <string name="cerrar">Cerrar</string>
+    <string name="title_activity_provedores">ProvedoresActivity</string>
+    <string name="title_activity_empleados">EmpleadosActivity</string>
+    <string name="title_activity_tienda">TiendaActivity</string>
+    <string name="title_activity_clientes">ClientesActivity</string>
+    <string name="title_activity_directores">DirectoresActivity</string>
+</resources>

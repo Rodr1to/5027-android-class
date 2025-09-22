@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -62,11 +64,10 @@ dependencies {
     //implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     implementation(libs.converter.gson)
 
+    // added
     implementation(libs.coil.compose)
-
-
     implementation(libs.coil.network.okhttp)
 
-
-
+    implementation(libs.androidx.core.splashscreen)
+    // end
 }

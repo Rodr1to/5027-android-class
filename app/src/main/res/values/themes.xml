@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.Sistema5027" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground">#FFA5B68D</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_png_splash</item>
+    </style>
 </resources>

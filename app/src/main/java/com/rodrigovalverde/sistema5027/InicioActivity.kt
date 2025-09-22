@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import coil3.compose.AsyncImage
 import com.rodrigovalverde.sistema5027.pages.ClientesActivity
 import com.rodrigovalverde.sistema5027.pages.DirectoresActivity
 import com.rodrigovalverde.sistema5027.pages.EmpleadosActivity
@@ -61,6 +62,8 @@ class InicioActivity : ComponentActivity() {
                     }
                 ){
                     Column (modifier = Modifier.padding(it)) {
+                        AsyncImage(model = "https://www.telemundo.com/sites/nbcutelemundo/files/images/promo/article/2016/07/15/mujer-comprando-rabanos-en-farmers-market.jpg",
+                            contentDescription = null)
                         Text(
                             text = stringResource(R.string.title_activity_inicio),
                             style = MaterialTheme.typography.headlineLarge

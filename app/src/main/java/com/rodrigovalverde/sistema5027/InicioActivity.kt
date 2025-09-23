@@ -7,9 +7,12 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -28,10 +31,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.rodrigovalverde.sistema5027.pages.ClientesActivity
 import com.rodrigovalverde.sistema5027.pages.DirectoresActivity
@@ -45,9 +52,17 @@ class InicioActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val titulos = arrayOf("Proveedores", "Empleados", "Tienda", "Clientes", "Directores", "Salir")
-        var iconosCard = arrayOf(
+        /*var iconosCard = arrayOf(
             Icons.Filled.AccountBox, Icons.Filled.Face, Icons.Filled.ShoppingCart,
             Icons.Filled.Person, Icons.Filled.Notifications, Icons.Filled.Close
+        ) */
+        var iconosCard = arrayOf(
+            R.drawable.suppliers_icon,
+            R.drawable.employee_icon,
+            R.drawable.marketplace_icon,
+            R.drawable.clients_icon,
+            R.drawable.directors_icon,
+            R.drawable.exit_icon
         )
         enableEdgeToEdge()
         setContent {
@@ -64,11 +79,6 @@ class InicioActivity : ComponentActivity() {
                     Column (modifier = Modifier.padding(it)) {
                         AsyncImage(model = "https://www.telemundo.com/sites/nbcutelemundo/files/images/promo/article/2016/07/15/mujer-comprando-rabanos-en-farmers-market.jpg",
                             contentDescription = null)
-                        Text(
-                            text = stringResource(R.string.title_activity_inicio),
-                            style = MaterialTheme.typography.headlineLarge
-                        )
-
                         LazyVerticalGrid(
                             modifier = Modifier.padding(dimensionResource(R.dimen.espacio_3)),
                             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.espacio_2)),
@@ -80,9 +90,13 @@ class InicioActivity : ComponentActivity() {
                                     seleccionarCard(index)
                             }){
                                     Column(
-                                        modifier = Modifier.padding(dimensionResource(R.dimen.espacio_4))
-                                    ) {
-                                        Icon(iconosCard[index], contentDescription = null)
+                                        modifier = Modifier.fillMaxWidth()
+                                            .padding(dimensionResource(R.dimen.espacio_4)),
+                                            horizontalAlignment = Alignment.CenterHorizontally){
+                                        // Icon(iconosCard[index], contentDescription = null)
+                                        Image(painterResource(iconosCard[index]), null,
+                                            modifier = Modifier.height(60.dp),
+                                            colorFilter = ColorFilter.tint(Color.White))
                                         Text(text = titulos[index])
                                     }
                                 }

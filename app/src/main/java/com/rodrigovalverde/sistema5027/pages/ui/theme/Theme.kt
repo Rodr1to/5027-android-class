@@ -15,7 +15,7 @@ private val DarkColorScheme = darkColorScheme(
     primary = color1,
     secondary = color2,
     tertiary = Pink40,
-    surfaceContainerHighest = color3
+    surfaceContainerHighest = color4
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -23,7 +23,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = color2,
     tertiary = Pink40,
 
-    surfaceContainerHighest = color3
+    surfaceContainerHighest = color4
 
 
     /* Other default colors to override

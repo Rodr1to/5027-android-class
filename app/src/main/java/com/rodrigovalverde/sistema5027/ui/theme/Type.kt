@@ -8,17 +8,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.rodrigovalverde.sistema5027.R
 
-val urbanistFamily = FontFamily(
-    Font(R.font.urbanist_extralight, FontWeight.ExtraLight),
-    Font(R.font.urbanist_regular, FontWeight.Normal),
-    Font(R.font.urbanist_bold, FontWeight.Bold),
-    Font(R.font.urbanist_black, FontWeight.Black),
+val JostFamily = FontFamily(
+    Font(R.font.jost_light, FontWeight.ExtraLight),
+    Font(R.font.jost_regular, FontWeight.Normal),
+    Font(R.font.jost_bold, FontWeight.Bold),
+    Font(R.font.jost_black, FontWeight.Black),
 )
 
-// Set of Material typography styles to start with
+
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = urbanistFamily,
+        fontFamily = JostFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
@@ -26,7 +26,7 @@ val Typography = Typography(
     ),
 
     titleLarge = TextStyle(
-        fontFamily = urbanistFamily,
+        fontFamily = JostFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         lineHeight = 28.sp,
@@ -34,32 +34,32 @@ val Typography = Typography(
     ),
 
     displayLarge = TextStyle(
-        fontFamily = urbanistFamily,
+        fontFamily = JostFamily,
         fontWeight = FontWeight.ExtraLight,
         fontSize = 64.sp,
         letterSpacing = (-3).sp
     ),
 
     headlineLarge = TextStyle(
-        fontFamily = urbanistFamily,
+        fontFamily = JostFamily,
         fontWeight = FontWeight.Black,
         fontSize = 36.sp,
         letterSpacing = (-1).sp
     ),
 
     labelLarge = TextStyle(
-        fontFamily = urbanistFamily,
+        fontFamily = JostFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
     ),
 
-/*,
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+    /*,
+        labelSmall = TextStyle(
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Medium,
+            fontSize = 11.sp,
+            lineHeight = 16.sp,
+            letterSpacing = 0.5.sp
+        )
+        */
 )

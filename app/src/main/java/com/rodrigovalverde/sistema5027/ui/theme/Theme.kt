@@ -1,6 +1,5 @@
 package com.rodrigovalverde.sistema5027.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -11,16 +10,22 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
+
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = color3,
+    secondary = color1,
+    tertiary = Pink80,
+    surfaceContainerHighest = color2
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color3,
-    secondary = Color1,
-    tertiary = Pink40
+    primary = color3,
+    secondary = color1,
+    tertiary = Pink40,
+    surfaceContainerHighest = color2
+
+
+
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

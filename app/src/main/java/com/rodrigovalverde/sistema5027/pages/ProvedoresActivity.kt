@@ -66,9 +66,6 @@ class ProvedoresActivity : ComponentActivity() {
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column (modifier = Modifier.padding(innerPadding)){
-
-
-
                         if(isLoading){
                             LinearProgressIndicator()
                         } else {

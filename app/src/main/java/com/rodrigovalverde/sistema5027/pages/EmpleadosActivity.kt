@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,8 +20,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
 import com.rodrigovalverde.sistema5027.models.Empleado
-import com.rodrigovalverde.sistema5027.pages.ui.theme.Sistema5027Theme
+import com.rodrigovalverde.sistema5027.ui.theme.Sistema5027Theme
+import com.rodrigovalverde.sistema5027.utils.API_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -35,7 +39,7 @@ class EmpleadosActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val api = Retrofit.Builder()
-            .baseUrl("https://servicios.campus.pe/")
+            .baseUrl(API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(EmpleadosService::class.java)
@@ -58,7 +62,15 @@ class EmpleadosActivity : ComponentActivity() {
                         } else {
                             LazyRow {
                                 items(items = listaEmpleados!!){ itemEmpleado ->
-                                    DibujarEmpleado(itemEmpleado)
+
+                                    Box {
+                                        AsyncImage(
+                                            API_URL + itemEmpleado.foto, null,
+                                            modifier = Modifier.fillParentMaxSize(),
+                                            contentScale = ContentScale.Crop
+                                        )
+                                        DibujarEmpleado(itemEmpleado)
+                                    }
                                 }
                             }
 
@@ -73,9 +85,9 @@ class EmpleadosActivity : ComponentActivity() {
 @Composable
 
 fun DibujarEmpleado(itemEmpleado: Empleado) {
-    Column {
-        Text(text = itemEmpleado.nombres)
-        Text(text = itemEmpleado.apellidos)
-        Text(text = itemEmpleado.cargo)
-    }
+        Column {
+            Text(text = itemEmpleado.nombres)
+            Text(text = itemEmpleado.apellidos)
+            Text(text = itemEmpleado.cargo)
+        }
 }

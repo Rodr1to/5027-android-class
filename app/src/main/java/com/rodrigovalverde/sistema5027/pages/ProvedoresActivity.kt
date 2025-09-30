@@ -31,6 +31,7 @@ import com.rodrigovalverde.sistema5027.pages.ui.theme.Sistema5027Theme
 import com.rodrigovalverde.sistema5027.pages.ui.theme.color1
 import com.rodrigovalverde.sistema5027.pages.ui.theme.color2
 import com.rodrigovalverde.sistema5027.pages.ui.theme.color4
+import com.rodrigovalverde.sistema5027.utils.API_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -46,7 +47,7 @@ class ProvedoresActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val api = Retrofit.Builder()
-            .baseUrl("https://servicios.campus.pe/")
+            .baseUrl(API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ProveedoresService::class.java)

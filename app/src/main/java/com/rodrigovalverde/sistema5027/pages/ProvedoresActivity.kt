@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.rodrigovalverde.sistema5027.R
 import com.rodrigovalverde.sistema5027.models.Proveedor
@@ -32,7 +31,6 @@ import com.rodrigovalverde.sistema5027.pages.ui.theme.Sistema5027Theme
 import com.rodrigovalverde.sistema5027.pages.ui.theme.color1
 import com.rodrigovalverde.sistema5027.pages.ui.theme.color2
 import com.rodrigovalverde.sistema5027.pages.ui.theme.color4
-import org.w3c.dom.Text
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

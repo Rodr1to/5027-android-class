@@ -33,16 +33,22 @@ interface EmpleadosService {
     @GET("empleados")
     suspend fun getEmpleados(): List<Empleado>
 }
+
+object RetrofitClientEmpleados{
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(API_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    val apiservice: EmpleadosService = retrofit.create(EmpleadosService::class.java)
+}
+
 class EmpleadosActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val api = Retrofit.Builder()
-            .baseUrl(API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(EmpleadosService::class.java)
+        val api = RetrofitClientEmpleados.apiservice
 
         setContent {
             Sistema5027Theme {

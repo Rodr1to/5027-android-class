@@ -44,6 +44,14 @@ interface ProductosService{
     suspend fun getProductos(@Query("idcategoria") idcategoria: Int): List<Producto>
 }
 
+object RetrofitClientProductos{
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(API_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    val apiservice: ProductosService = retrofit.create(ProductosService::class.java)
+}
+
 class ProductosActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +61,7 @@ class ProductosActivity : ComponentActivity() {
         val descripcion = bundle.getString("descripcion")
         Log.d("datos", nombre.toString())
 
-        val api = Retrofit.Builder()
-            .baseUrl(API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ProductosService::class.java)
+        val api = RetrofitClientProductos.apiservice
 
         enableEdgeToEdge()
         setContent {

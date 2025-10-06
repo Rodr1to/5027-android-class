@@ -49,16 +49,21 @@ interface CategoriasService {
     @GET("categorias.php")
     suspend fun getCategorias(): List<Categoria>
 }
+
+object RetrofitClientCategorias{
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(API_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    val apiservice: CategoriasService = retrofit.create(CategoriasService::class.java)
+}
+
 class TiendaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val api = Retrofit.Builder()
-            .baseUrl(API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(CategoriasService::class.java)
+        val api = RetrofitClientCategorias.apiservice
 
         setContent {
             Sistema5027Theme {

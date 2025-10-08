@@ -1,38 +1,47 @@
 package com.rodrigovalverde.sistema5027.pages
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-
 import com.rodrigovalverde.sistema5027.R
-
 import com.rodrigovalverde.sistema5027.models.Producto
 import com.rodrigovalverde.sistema5027.ui.theme.Sistema5027Theme
+import com.rodrigovalverde.sistema5027.ui.theme.color1
+import com.rodrigovalverde.sistema5027.ui.theme.color4
 import com.rodrigovalverde.sistema5027.utils.API_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -85,7 +94,13 @@ class ProductosActivity : ComponentActivity() {
                             columns = GridCells.Fixed(2)
                         ) {
                             items(items = listaProductos!!){ itemProducto ->
-                                DibujarProducto(itemProducto)
+                                Card (
+                                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.espacio_1)),
+                                    colors = CardDefaults.cardColors(Color.White)
+
+                                ){
+                                    DibujarProducto(itemProducto)
+                                }
                             }
                         }
                     }
@@ -97,13 +112,53 @@ class ProductosActivity : ComponentActivity() {
     }//onCreate
 }//class
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun DibujarProducto(itemProducto: Producto){
-    Column {
-        AsyncImage(model = API_URL + itemProducto.imagenchica, null,
-            modifier = Modifier.fillMaxWidth().height(120.dp))
-        Text(text = itemProducto.nombre)
-        val precio = itemProducto.precio
-        Text(text = "S/ " + String.format("%.2f", precio))
+    var precioFinal:Float = itemProducto.precio
+    if(itemProducto.preciorebajado != 0f){
+        precioFinal = itemProducto.preciorebajado
+    }
+
+    Column{
+        Box (contentAlignment = Alignment.TopEnd) {
+            var imagenProducto = API_URL + "imagenes/nofoto.jpg"
+            if (itemProducto.imagenchica != null){
+                imagenProducto = API_URL + itemProducto.imagenchica
+            }
+
+            AsyncImage(
+                model = imagenProducto, null,
+                modifier = Modifier.fillMaxWidth().height(120.dp)
+            )
+            if (itemProducto.preciorebajado != 0f) {
+                val porcentajeDescuento =
+                    (1 - itemProducto.preciorebajado / itemProducto.precio) * 100
+                Text(text = "-" + String.format("%.0f", porcentajeDescuento) + "%",
+                    modifier = Modifier
+                        .background(color = color4)
+                        .padding(horizontal = dimensionResource(R.dimen.espacio_2)),
+                    color = Color.White)
+
+            }
+        }
+        Column (modifier = Modifier.padding(dimensionResource(R.dimen.espacio_2)),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = itemProducto.nombre, modifier = Modifier.fillMaxWidth().height(40.dp),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.labelLarge,
+                lineHeight = 14.sp)
+            Row (verticalAlignment = Alignment.CenterVertically){
+                Text(text = "S/ " + String.format("%.2f", precioFinal))
+                if(itemProducto.preciorebajado != 0f){
+                    Text(text = "S/ " + String.format("%.2f", itemProducto.precio),
+                        color = Color.Red,
+                        textDecoration = TextDecoration.LineThrough,
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(start = dimensionResource(R.dimen.espacio_1))
+                    )
+                }
+            }
+        }
     }
 }

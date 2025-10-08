@@ -24,21 +24,27 @@
             android:label="@string/title_activity_directores"
             android:theme="@style/Theme.Sistema5027" />
         <activity
-            android:name=".pages.ClientesActivity"
-            android:exported="false"
-            android:label="@string/title_activity_clientes"
-            android:theme="@style/Theme.Sistema5027" />
-        <activity
-            android:name=".pages.TiendaActivity"
+            android:name=".pages.LoginActivity"
             android:exported="true"
-            android:label="@string/title_activity_tienda"
-            android:theme="@style/Theme.Sistema5027">
+            android:label="Login"
+            android:theme="@style/Theme.Sistema5027" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
+        <activity
+            android:name=".pages.ClientesActivity"
+            android:exported="true"
+            android:label="@string/title_activity_clientes"
+            android:theme="@style/Theme.Sistema5027" />
+        <activity
+            android:name=".pages.TiendaActivity"
+            android:exported="false"
+            android:label="@string/title_activity_tienda"
+            android:theme="@style/Theme.Sistema5027"/>
+
         <activity
             android:name=".pages.EmpleadosActivity"
             android:exported="false"
@@ -71,6 +77,11 @@
             android:theme="@style/Theme.Sistema5027">
 
         </activity>
+        <activity
+            android:name=".pages.ProductosActivity"
+            android:exported="false"
+            android:label="Productos"
+            android:theme="@style/Theme.Sistema5027" />
     </application>
 
 </manifest>

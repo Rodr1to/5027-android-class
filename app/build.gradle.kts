@@ -64,6 +64,8 @@ dependencies {
     //implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     implementation(libs.converter.gson)
 
+    implementation(libs.converter.scalars)
+
     // added
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)

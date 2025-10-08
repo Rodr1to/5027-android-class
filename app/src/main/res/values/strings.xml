@@ -32,4 +32,9 @@ Finalmente, la tienda no será responsable por fallos técnicos, interrupciones 
     <string name="title_activity_clientes">ClientesActivity</string>
     <string name="title_activity_directores">DirectoresActivity</string>
     <string name="title_activity_intro">IntroActivity</string>
+    <string name="title_activity_productos">ProductosActivity</string>
+    <string name="title_activity_login">Iniciar sesión</string>
+    <string name="correo_telefono">Correo ó teléfono</string>
+    <string name="clave">Contraseña</string>
+    <string name="title_activity_perfil">Perfil</string>
 </resources>

@@ -43,7 +43,6 @@ import retrofit2.http.GET
 import com.rodrigovalverde.sistema5027.R
 import com.rodrigovalverde.sistema5027.ui.theme.color1
 import com.rodrigovalverde.sistema5027.ui.theme.color3
-import com.rodrigovalverde.sistema5027.ui.theme.color4
 
 interface CategoriasService {
     @GET("categorias.php")
@@ -109,7 +108,7 @@ class TiendaActivity : ComponentActivity() {
         Log.d("Categoria", itemCategoria.nombre)
         Toast.makeText(this, itemCategoria.nombre, Toast.LENGTH_SHORT).show()
         val bundle = Bundle().apply {
-            putInt("idcategoria", itemCategoria.idcategroia)
+            putInt("idcategoria", itemCategoria.idcategoria)
             putString("nombre", itemCategoria.nombre)
             putString("descripcion", itemCategoria.descripcion)
         }
@@ -127,7 +126,7 @@ fun DibujarCategoria(itemCategoria: Categoria) {
         model = API_URL + itemCategoria.foto,
         contentDescription = null)
     Row (modifier = Modifier.fillMaxWidth().padding(dimensionResource(R.dimen.espacio_2))){
-        Text(text = itemCategoria.idcategroia.toString(),
+        Text(text = itemCategoria.idcategoria.toString(),
             style = MaterialTheme.typography.displaySmall,
             color = color3,
             modifier = Modifier.width(50.dp))

@@ -27,6 +27,12 @@
             android:name=".pages.LoginActivity"
             android:exported="true"
             android:label="Login"
+            android:theme="@style/Theme.Sistema5027" />
+
+        <activity
+            android:name=".pages.ClientesActivity"
+            android:exported="true"
+            android:label="Clientes"
             android:theme="@style/Theme.Sistema5027" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -34,11 +40,6 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-        <activity
-            android:name=".pages.ClientesActivity"
-            android:exported="true"
-            android:label="@string/title_activity_clientes"
-            android:theme="@style/Theme.Sistema5027" />
         <activity
             android:name=".pages.TiendaActivity"
             android:exported="false"

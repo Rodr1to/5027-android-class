@@ -1,18 +1,22 @@
 package com.rodrigovalverde.sistema5027.pages
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -32,7 +36,9 @@ import com.rodrigovalverde.sistema5027.R
 import com.rodrigovalverde.sistema5027.models.Producto
 import com.rodrigovalverde.sistema5027.ui.theme.Sistema5027Theme
 import com.rodrigovalverde.sistema5027.utils.API_URL
+import com.rodrigovalverde.sistema5027.utils.datosUsuario
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Field
@@ -63,6 +69,7 @@ class LoginActivity : ComponentActivity() {
             Sistema5027Theme {
                 var correotelefono by remember { mutableStateOf("") }
                 var clave by remember { mutableStateOf("") }
+                var estadoCheck by remember { mutableStateOf(false) }
 
                 val api = RetrofitClientLogin.apiService
 
@@ -89,9 +96,17 @@ class LoginActivity : ComponentActivity() {
                         visualTransformation = PasswordVisualTransformation()
                     )
                     Spacer(Modifier.height(dimensionResource(R.dimen.espacio_2)))
+                    Row (verticalAlignment = Alignment.CenterVertically){
+                        Checkbox(checked = estadoCheck,
+                            onCheckedChange = { estadoCheck = it})
+                        Text("Guardar sesión")
+
+                    }
+                    Spacer(Modifier.height(dimensionResource(R.dimen.espacio_2)))
                     OutlinedButton (onClick = {
                         lifecycleScope.launch {
                             val respuesta = api.getLogin(correotelefono, clave)
+                            Log.d("LOGIN", respuesta)
                             if(respuesta == "-1"){
                                 Toast.makeText(this@LoginActivity,
                                     "La cuenta no existe", Toast.LENGTH_SHORT).show()
@@ -101,6 +116,11 @@ class LoginActivity : ComponentActivity() {
                             } else {
                                 Toast.makeText(this@LoginActivity,
                                     "Bienvenido", Toast.LENGTH_SHORT).show()
+                                datosUsuario = JSONArray(respuesta).getJSONObject(0)
+                                if(estadoCheck){
+
+                                }
+                                startActivity(Intent(this@LoginActivity, PerfilActivity::class.java))
 
                             }
                         }

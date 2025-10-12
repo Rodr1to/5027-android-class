@@ -72,4 +72,7 @@ dependencies {
 
     implementation(libs.androidx.core.splashscreen)
     // end
+
+    // implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation(libs.androidx.datastore.preferences)
 }

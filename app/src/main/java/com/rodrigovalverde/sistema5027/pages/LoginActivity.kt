@@ -36,6 +36,7 @@ import com.rodrigovalverde.sistema5027.R
 import com.rodrigovalverde.sistema5027.models.Producto
 import com.rodrigovalverde.sistema5027.ui.theme.Sistema5027Theme
 import com.rodrigovalverde.sistema5027.utils.API_URL
+import com.rodrigovalverde.sistema5027.utils.UserStore
 import com.rodrigovalverde.sistema5027.utils.datosUsuario
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -117,7 +118,10 @@ class LoginActivity : ComponentActivity() {
                                 Toast.makeText(this@LoginActivity,
                                     "Bienvenido", Toast.LENGTH_SHORT).show()
                                 datosUsuario = JSONArray(respuesta).getJSONObject(0)
+
                                 if(estadoCheck){
+                                    var userStore = UserStore(this@LoginActivity)
+                                    userStore.guardarDatosUsuario(respuesta)
 
                                 }
                                 startActivity(Intent(this@LoginActivity, PerfilActivity::class.java))

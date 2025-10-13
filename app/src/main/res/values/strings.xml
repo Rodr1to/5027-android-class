@@ -37,4 +37,5 @@ Finalmente, la tienda no será responsable por fallos técnicos, interrupciones 
     <string name="correo_telefono">Correo ó teléfono</string>
     <string name="clave">Contraseña</string>
     <string name="title_activity_perfil">Perfil</string>
+    <string name="title_activity_producto_detalle">ProductoDetalleActivity</string>
 </resources>

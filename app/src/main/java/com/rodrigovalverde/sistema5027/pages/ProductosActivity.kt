@@ -1,12 +1,14 @@
 package com.rodrigovalverde.sistema5027.pages
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,9 +19,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -45,7 +50,6 @@ import coil3.compose.AsyncImage
 import com.rodrigovalverde.sistema5027.R
 import com.rodrigovalverde.sistema5027.models.Producto
 import com.rodrigovalverde.sistema5027.ui.theme.Sistema5027Theme
-import com.rodrigovalverde.sistema5027.ui.theme.color1
 import com.rodrigovalverde.sistema5027.ui.theme.color4
 import com.rodrigovalverde.sistema5027.utils.API_URL
 import retrofit2.Retrofit
@@ -95,7 +99,18 @@ class ProductosActivity : ComponentActivity() {
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.secondary,
                                 titleContentColor = Color.White
-                            )
+                            ),
+                            navigationIcon = {
+                                IconButton(
+                                    onClick = { finish() }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = null,
+                                        tint = Color.White
+                                    )
+                                }
+                            }
                         )
                     }
                 ) {
@@ -113,8 +128,12 @@ class ProductosActivity : ComponentActivity() {
                                 items(items = listaProductos!!) { itemProducto ->
                                     Card(
                                         elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.espacio_1)),
-                                        colors = CardDefaults.cardColors(Color.White)
-
+                                        colors = CardDefaults.cardColors(Color.White),
+                                        modifier = Modifier.clickable(
+                                            onClick = {
+                                                seleccionarProducto(itemProducto.idproducto)
+                                            }
+                                        )
                                     ) {
                                         DibujarProducto(itemProducto)
                                     }
@@ -127,6 +146,16 @@ class ProductosActivity : ComponentActivity() {
             }
         }
     }//onCreate
+    fun seleccionarProducto(idproducto: Int) {
+        val intent = Intent(this, ProductoDetalleActivity::class.java)
+        val bundle = Bundle().apply {
+            putInt("idproducto", idproducto)
+        }
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
+
 }//class
 
 @SuppressLint("DefaultLocale")

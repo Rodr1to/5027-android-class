@@ -70,7 +70,7 @@ class PerfilActivity : ComponentActivity() {
                                     userStore.guardarDatosUsuario("")
                                     finish()
                                 }
-                            }) { Text("Si") }
+                            }) { Text("Sí") }
                         },
                         dismissButton = {
                             Button(onClick = { mostrarVentana = false }) {

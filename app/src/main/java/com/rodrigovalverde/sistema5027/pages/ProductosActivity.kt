@@ -19,9 +19,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -62,6 +67,7 @@ object RetrofitClientProductos{
 }
 
 class ProductosActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = intent.extras //para poder leer datos que se envían a este activity
@@ -83,29 +89,40 @@ class ProductosActivity : ComponentActivity() {
                     listaProductos = api.getProductos(idcategoria)
                     isLoading = false
                 }
-                Column {
-                    if(isLoading){
-                        LinearProgressIndicator()
-                    } else {
-                        LazyVerticalGrid(
-                            modifier = Modifier.padding(dimensionResource(R.dimen.espacio_3)),
-                            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.espacio_2)),
-                            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.espacio_2)),
-                            columns = GridCells.Fixed(2)
-                        ) {
-                            items(items = listaProductos!!){ itemProducto ->
-                                Card (
-                                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.espacio_1)),
-                                    colors = CardDefaults.cardColors(Color.White)
+                Scaffold (
+                    topBar = {
+                        TopAppBar(title = {Text(text = nombre.toString())},
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = MaterialTheme.colorScheme.secondary,
+                                titleContentColor = Color.White
+                            )
+                        )
+                    }
+                ) {
+                    Column (Modifier.padding(it)){
+                        if (isLoading) {
+                            LinearProgressIndicator()
+                        } else {
+                            Text(descripcion.toString())
+                            LazyVerticalGrid(
+                                modifier = Modifier.padding(dimensionResource(R.dimen.espacio_3)),
+                                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.espacio_2)),
+                                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.espacio_2)),
+                                columns = GridCells.Fixed(2)
+                            ) {
+                                items(items = listaProductos!!) { itemProducto ->
+                                    Card(
+                                        elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.espacio_1)),
+                                        colors = CardDefaults.cardColors(Color.White)
 
-                                ){
-                                    DibujarProducto(itemProducto)
+                                    ) {
+                                        DibujarProducto(itemProducto)
+                                    }
                                 }
                             }
                         }
-                    }
+                    } // Column
                 }
-
 
             }
         }

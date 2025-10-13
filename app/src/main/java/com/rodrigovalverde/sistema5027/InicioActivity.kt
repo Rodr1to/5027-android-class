@@ -73,7 +73,8 @@ class InicioActivity : ComponentActivity() {
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.secondary,
                                 titleContentColor = Color.White
-                            ))
+                            )
+                        )
                     }
                 ){
                     Column (modifier = Modifier.padding(it)) {

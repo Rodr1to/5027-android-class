@@ -118,6 +118,9 @@ class ProductoDetalleActivity : ComponentActivity() {
                         .padding(horizontal = dimensionResource(R.dimen.espacio_3))) {
                         productoSeleccionado?.let { iProducto ->
                             val imagenProducto = API_URL + (iProducto.imagengrande ?: "imagenes/nofoto.jpg")
+                            // val precioFinal = if (iProducto.preciorebajado == 0f) iProducto.precio else iProducto.preciorebajado
+                            val precioFinal = iProducto.preciorebajado.takeIf { it > 0f } ?: iProducto.precio
+
 
                             AsyncImage(
                                 model = imagenProducto, null,
@@ -125,7 +128,7 @@ class ProductoDetalleActivity : ComponentActivity() {
                             )
                             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.espacio_2)))
                             HorizontalDivider(thickness = 1.dp, color = color3)
-                            FilaDetalle("Precio", iProducto.precio.toString())
+                            FilaDetalle("Precio", "S/ ${"%.2f".format(precioFinal)}")
                             FilaDetalle("Detalle", iProducto.detalle)
                             FilaDetalle("Stock", iProducto.unidadesenexistencia.toString())
                             FilaDetalle("Categoria", iProducto.categoria)

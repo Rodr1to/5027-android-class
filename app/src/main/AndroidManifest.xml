@@ -25,7 +25,7 @@
             android:theme="@style/Theme.Sistema5027" />
         <activity
             android:name=".IntroActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.App.Starting" />
         <activity
             android:name=".pages.DirectoresActivity"
@@ -34,25 +34,20 @@
             android:theme="@style/Theme.Sistema5027" />
         <activity
             android:name=".pages.LoginActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Login"
             android:theme="@style/Theme.Sistema5027" />
         <activity
             android:name=".pages.ClientesActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Clientes"
             android:theme="@style/Theme.Sistema5027" />
         <activity
             android:name=".pages.TiendaActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/title_activity_tienda"
-            android:theme="@style/Theme.Sistema5027">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/Theme.Sistema5027"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".pages.EmpleadosActivity"
             android:exported="false"
@@ -80,9 +75,15 @@
             android:theme="@style/Theme.Sistema5027" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Sistema5027" />
+            android:theme="@style/Theme.Sistema5027" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".pages.ProductosActivity"
             android:exported="false"

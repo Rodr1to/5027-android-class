@@ -1,5 +1,6 @@
 package com.rodrigovalverde.sistema5027.pages
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.rodrigovalverde.sistema5027.R
@@ -7,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -80,7 +82,7 @@ class DirectoresActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     floatingActionButton = {
                         FloatingActionButton(onClick = {
-
+                            startActivity(Intent(this, DirectoresInsertarActivity::class.java))
                         }) {
                             Icon(Icons.Default.Add, contentDescription = null)
                         }
@@ -96,7 +98,11 @@ class DirectoresActivity : ComponentActivity() {
                             LazyColumn {
 
                                     items(items = listaDirectores!!){ itemDirector ->
-                                        DibujarDirector(itemDirector)
+                                        Column (Modifier.clickable(onClick = {
+                                            seleccionarDirector(itemDirector)
+                                        })) {
+                                            DibujarDirector(itemDirector)
+                                        }
                                     }
                                 }
                             }
@@ -105,6 +111,9 @@ class DirectoresActivity : ComponentActivity() {
 
             }
         }
+    }
+    fun seleccionarDirector (itemDirector: Director) {
+
     }
 }
 

@@ -113,7 +113,14 @@ class DirectoresActivity : ComponentActivity() {
         }
     }
     fun seleccionarDirector (itemDirector: Director) {
-
+        val bundle = Bundle().apply {
+            putInt("iddirector", itemDirector.iddirector)
+            putString("nombres", itemDirector.nombres)
+            putString("peliculas", itemDirector.peliculas)
+        }
+        val intent = Intent(this, DirectoresActualizarActivity::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 }
 

@@ -47,6 +47,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 
+
 interface DirectoresInsertarService{
     @FormUrlEncoded
     @POST("directoresinsert.php")
@@ -107,7 +108,7 @@ class DirectoresInsertarActivity : ComponentActivity() {
                                 DirectoresActivity::class.java))
                         }
                     }) {
-                        Text(stringResource(R.string.title_activity_login))
+                        Text(stringResource(R.string.title_activity_directores_insertar))
                     }
                 }
 

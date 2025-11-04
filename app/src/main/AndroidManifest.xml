@@ -98,6 +98,12 @@
             android:exported="false"
             android:label="Productos"
             android:theme="@style/Theme.Sistema5027" />
+
+        <activity
+            android:name=".pages.UsuariosActivity"
+            android:exported="false"
+            android:label="Usuarios"
+            android:theme="@style/Theme.Sistema5027" />
     </application>
 
 </manifest>

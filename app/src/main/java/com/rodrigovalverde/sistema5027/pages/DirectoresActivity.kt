@@ -2,56 +2,61 @@ package com.rodrigovalverde.sistema5027.pages
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
-import com.rodrigovalverde.sistema5027.R
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
+import com.rodrigovalverde.sistema5027.R
 import com.rodrigovalverde.sistema5027.models.Director
-import com.rodrigovalverde.sistema5027.models.Proveedor
 import com.rodrigovalverde.sistema5027.pages.ui.theme.Sistema5027Theme
 import com.rodrigovalverde.sistema5027.pages.ui.theme.color1
 import com.rodrigovalverde.sistema5027.pages.ui.theme.color2
-import com.rodrigovalverde.sistema5027.pages.ui.theme.color4
 import com.rodrigovalverde.sistema5027.utils.API_URL
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.POST
 
-
+// Interfaz para el servicio que devuelve JSON (tu código original)
 interface DirectoresService {
     @GET("directores.php")
     suspend fun getDirectores(): List<Director>
 }
 
-object RetrofitClientDirectores{
+// Interfaz para el servicio que devuelve TEXTO (para el delete)
+interface DirectoresDeleteService {
+    @FormUrlEncoded
+    @POST("directoresdelete.php")
+    suspend fun deleteDirector(
+        @Field("iddirector") idDirector: Int
+    ): String // Espera una respuesta de texto simple
+}
+
+// Cliente de Retrofit para JSON (tu código original)
+object RetrofitClientDirectores {
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(API_URL)
         .addConverterFactory(GsonConverterFactory.create())
@@ -60,59 +65,127 @@ object RetrofitClientDirectores{
     val apiservice: DirectoresService = retrofit.create(DirectoresService::class.java)
 }
 
+// NUEVO Cliente de Retrofit para TEXTO
+object RetrofitClientDirectoresDelete {
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(API_URL)
+        .addConverterFactory(ScalarsConverterFactory.create()) // Usa el convertidor de texto
+        .build()
+
+    val apiservice: DirectoresDeleteService = retrofit.create(DirectoresDeleteService::class.java)
+}
 
 class DirectoresActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val api = RetrofitClientDirectores.apiservice
+        val apiJson = RetrofitClientDirectores.apiservice
+        val apiDelete = RetrofitClientDirectoresDelete.apiservice // Nuevo cliente
 
         setContent {
             Sistema5027Theme {
                 var isLoading by remember { mutableStateOf(true) }
-                var listaDirectores by remember {
-                    mutableStateOf<List<Director>?> (null)}
+                var listaDirectores by remember { mutableStateOf<List<Director>>(emptyList()) }
 
-                LaunchedEffect(Unit) {
-                    listaDirectores = api.getDirectores()
-                    isLoading = false
+                // Estados para el diálogo de eliminación
+                var showDialog by remember { mutableStateOf(false) }
+                var directorAEliminar by remember { mutableStateOf<Director?>(null) }
+                val context = LocalContext.current
+
+                fun cargarDirectores() {
+                    lifecycleScope.launch {
+                        isLoading = true
+                        try {
+                            listaDirectores = apiJson.getDirectores()
+                        } catch (e: Exception) {
+                            Log.e("DirectoresActivity", "Error al cargar: ${e.message}")
+                        }
+                        isLoading = false
+                    }
                 }
 
-                Scaffold(modifier = Modifier.fillMaxSize(),
+                // Cargar datos al iniciar
+                LaunchedEffect(Unit) {
+                    cargarDirectores()
+                }
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
                     floatingActionButton = {
                         FloatingActionButton(onClick = {
+                            // Tu código original apunta a Insertar
                             startActivity(Intent(this, DirectoresInsertarActivity::class.java))
                         }) {
                             Icon(Icons.Default.Add, contentDescription = null)
                         }
                     }
-                    ) { innerPadding ->
-                    Column (modifier = Modifier.padding(innerPadding)){
-                        Text(text = stringResource(R.string.title_activity_directores),
+                ) { innerPadding ->
+                    Column(modifier = Modifier.padding(innerPadding)) {
+                        Text(
+                            text = stringResource(R.string.title_activity_directores),
                             modifier = Modifier.padding(dimensionResource(R.dimen.espacio_1)),
-                            style = MaterialTheme.typography.headlineLarge)
-                        if(isLoading){
+                            style = MaterialTheme.typography.headlineLarge
+                        )
+                        if (isLoading) {
                             LinearProgressIndicator()
                         } else {
                             LazyColumn {
-
-                                    items(items = listaDirectores!!){ itemDirector ->
-                                        Column (Modifier.clickable(onClick = {
+                                items(items = listaDirectores) { itemDirector ->
+                                    DibujarDirector(
+                                        itemDirector,
+                                        onEditClick = {
                                             seleccionarDirector(itemDirector)
-                                        })) {
-                                            DibujarDirector(itemDirector)
+                                        },
+                                        onDeleteClick = {
+                                            directorAEliminar = itemDirector
+                                            showDialog = true
                                         }
-                                    }
+                                    )
                                 }
                             }
+                        }
                     }
                 }
 
+                // Diálogo de confirmación
+                if (showDialog && directorAEliminar != null) {
+                    AlertDialog(
+                        onDismissRequest = { showDialog = false },
+                        title = { Text("Confirmar Eliminación") },
+                        text = { Text("¿Estás seguro de que deseas eliminar a ${directorAEliminar!!.nombres}?") },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    lifecycleScope.launch {
+                                        try {
+                                            // Usamos el cliente de TEXTO para la llamada de eliminación
+                                            val response = apiDelete.deleteDirector(directorAEliminar!!.iddirector)
+                                            Log.d("DirectoresActivity", "Respuesta de eliminación: $response")
+                                            Toast.makeText(context, "Director eliminado", Toast.LENGTH_SHORT).show()
+                                            cargarDirectores() // Recargar la lista
+                                        } catch (e: Exception) {
+                                            Toast.makeText(context, "Error al eliminar", Toast.LENGTH_SHORT).show()
+                                            Log.e("DirectoresActivity", "Error al eliminar: ${e.message}")
+                                        }
+                                        showDialog = false
+                                        directorAEliminar = null
+                                    }
+                                }
+                            ) { Text("Eliminar") }
+                        },
+                        dismissButton = {
+                            OutlinedButton(onClick = { showDialog = false }) {
+                                Text("Cancelar")
+                            }
+                        }
+                    )
+                }
             }
         }
     }
-    fun seleccionarDirector (itemDirector: Director) {
+
+    fun seleccionarDirector(itemDirector: Director) {
         val bundle = Bundle().apply {
             putInt("iddirector", itemDirector.iddirector)
             putString("nombres", itemDirector.nombres)
@@ -125,21 +198,39 @@ class DirectoresActivity : ComponentActivity() {
 }
 
 @Composable
-
-fun DibujarDirector(itemDirector: Director) {
+fun DibujarDirector(
+    itemDirector: Director,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(dimensionResource(R.dimen.espacio_2))
             .border(BorderStroke(3.dp, color2))
             .padding(dimensionResource(R.dimen.espacio_3))
     ) {
-
-        Text(
-            text = itemDirector.iddirector.toString(),
-            style = MaterialTheme.typography.titleLarge,
-            color = color1
-        )
-        Text(text = itemDirector.nombres)
-        Text(text = itemDirector.peliculas)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(onClick = onEditClick)
+            ) {
+                Text(
+                    text = itemDirector.iddirector.toString(),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = color1
+                )
+                Text(text = itemDirector.nombres)
+                Text(text = itemDirector.peliculas)
+            }
+            // Botón de eliminar
+            IconButton(onClick = onDeleteClick) {
+                Icon(Icons.Filled.Delete, contentDescription = "Eliminar", tint = MaterialTheme.colorScheme.error)
+            }
+        }
     }
 }

@@ -1,19 +1,19 @@
 package com.rodrigovalverde.sistema5027.pages
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.automirrored.filled.ArrowBack // <-- IMPORTAR FLECHA
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,10 +25,9 @@ import coil3.compose.rememberAsyncImagePainter
 import com.rodrigovalverde.sistema5027.room.AppDatabase
 import com.rodrigovalverde.sistema5027.room.Usuario
 import com.rodrigovalverde.sistema5027.ui.theme.Sistema5027Theme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class UsuariosActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,93 +37,51 @@ class UsuariosActivity : ComponentActivity() {
 
         setContent {
             Sistema5027Theme {
-                UsuariosScreen(usuarioDao)
-            }
-        }
-    }
-}
+                val context = LocalContext.current
+                val usuariosList by usuarioDao.getAll().collectAsState(initial = emptyList())
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun UsuariosScreen(usuarioDao: com.rodrigovalverde.sistema5027.room.UsuarioDao) {
-    val context = LocalContext.current
-    var nombres by remember { mutableStateOf("") }
-    var apellidos by remember { mutableStateOf("") }
-    var fotoUri by remember { mutableStateOf<Uri?>(null) }
-
-    val usuariosList by usuarioDao.getAll().collectAsState(initial = emptyList())
-    val scope = rememberCoroutineScope()
-
-    val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        fotoUri = uri
-    }
-
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(16.dp)
-        ) {
-            Text("Gestión de Usuarios (Room)", style = MaterialTheme.typography.headlineLarge)
-
-            OutlinedTextField(
-                value = nombres,
-                onValueChange = { nombres = it },
-                label = { Text("Nombres") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = apellidos,
-                onValueChange = { apellidos = it },
-                label = { Text("Apellidos") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(onClick = { galleryLauncher.launch("image/*") }) {
-                Text("Elegir Foto")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-                    if (nombres.isNotBlank() && apellidos.isNotBlank()) {
-                        val nuevoUsuario = Usuario(
-                            nombres = nombres,
-                            apellidos = apellidos,
-                            foto = fotoUri?.toString()
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        TopAppBar(
+                            title = { Text("Gestión de Usuarios (Room)") },
+                            navigationIcon = {
+                                IconButton(onClick = { finish() }) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = "Volver"
+                                    )
+                                }
+                            }
                         )
-                        scope.launch(Dispatchers.IO) {
-                            usuarioDao.insert(nuevoUsuario)
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(onClick = {
+                            // Inicia la actividad de Inserción
+                            context.startActivity(Intent(context, UsuarioInsertActivity::class.java))
+                        }) {
+                            Icon(Icons.Filled.Add, "Añadir Usuario")
                         }
-                        // Limpiar campos
-                        nombres = ""
-                        apellidos = ""
-                        fotoUri = null
-                        Toast.makeText(context, "Usuario guardado", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "Complete los campos", Toast.LENGTH_SHORT).show()
                     }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Guardar")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LazyColumn {
-                items(usuariosList) { usuario ->
-                    UsuarioItem(usuario = usuario, onEliminar = {
-                        scope.launch(Dispatchers.IO) {
-                            usuarioDao.delete(usuario)
+                ) { innerPadding ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        items(usuariosList) { usuario ->
+                            UsuarioItem(
+                                usuario = usuario,
+                                onUsuarioClick = {
+                                    // Inicia la actividad de Actualización
+                                    val intent = Intent(context, UsuarioUpdateActivity::class.java)
+                                    intent.putExtra("USUARIO_ID", usuario.id)
+                                    context.startActivity(intent)
+                                }
+                            )
+                            Divider()
                         }
-                    })
-                    Divider()
+                    }
                 }
             }
         }
@@ -132,9 +89,12 @@ fun UsuariosScreen(usuarioDao: com.rodrigovalverde.sistema5027.room.UsuarioDao) 
 }
 
 @Composable
-fun UsuarioItem(usuario: Usuario, onEliminar: () -> Unit) {
+fun UsuarioItem(usuario: Usuario, onUsuarioClick: (Usuario) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onUsuarioClick(usuario) } // <-- Hacemos el item clickeable
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (usuario.foto != null) {
@@ -148,11 +108,8 @@ fun UsuarioItem(usuario: Usuario, onEliminar: () -> Unit) {
         }
 
         Column(modifier = Modifier.weight(1f).padding(horizontal = 8.dp)) {
-            Text("${usuario.nombres} ${usuario.apellidos}")
-        }
-
-        IconButton(onClick = onEliminar) {
-            Icon(Icons.Filled.Delete, contentDescription = "Eliminar", tint = MaterialTheme.colorScheme.error)
+            Text("${usuario.apellidos}, ${usuario.nombres}", style = MaterialTheme.typography.titleMedium)
+            Text("Edad: ${usuario.edad}", style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

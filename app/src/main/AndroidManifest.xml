@@ -104,6 +104,16 @@
             android:exported="false"
             android:label="Usuarios"
             android:theme="@style/Theme.Sistema5027" />
-    </application>
 
+        <activity
+            android:name=".pages.UsuarioInsertActivity"
+            android:exported="false"
+            android:label="Nuevo Usuario"
+            android:theme="@style/Theme.Sistema5027" />
+        <activity
+            android:name=".pages.UsuarioUpdateActivity"
+            android:exported="false"
+            android:label="Actualizar Usuario"
+            android:theme="@style/Theme.Sistema5027" />
+    </application>
 </manifest>

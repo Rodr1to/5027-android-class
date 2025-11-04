@@ -12,6 +12,11 @@ data class Usuario(
     val nombres: String,
     @ColumnInfo(name = "apellidos")
     val apellidos: String,
+
+    // AÑADIR ESTE CAMPO
+    @ColumnInfo(name = "edad")
+    val edad: Int, // <-- Tu profesor pide Edad
+
     @ColumnInfo(name = "foto")
-    val foto: String? // Almacenará la URI de la imagen como texto
+    val foto: String? // Opcional, como mencionaste
 )

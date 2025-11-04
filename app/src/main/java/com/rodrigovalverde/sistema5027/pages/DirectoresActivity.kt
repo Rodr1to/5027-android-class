@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack // <-- 1. IMPORTAR FLECHA
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
@@ -76,6 +77,8 @@ object RetrofitClientDirectoresDelete {
 }
 
 class DirectoresActivity : ComponentActivity() {
+
+    @OptIn(ExperimentalMaterial3Api::class) // <-- 2. AÑADIR ANOTACIÓN
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -112,6 +115,28 @@ class DirectoresActivity : ComponentActivity() {
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
+
+                    // --- 3. AÑADIR EL TOPAPPBAR ---
+                    topBar = {
+                        TopAppBar(
+                            title = {
+                                Text(
+                                    text = stringResource(R.string.title_activity_directores),
+                                    style = MaterialTheme.typography.headlineLarge
+                                )
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = { finish() }) { // finish() vuelve atrás
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = "Volver"
+                                    )
+                                }
+                            }
+                        )
+                    },
+                    // --- FIN DE LA MODIFICACIÓN ---
+
                     floatingActionButton = {
                         FloatingActionButton(onClick = {
                             // Tu código original apunta a Insertar
@@ -122,15 +147,21 @@ class DirectoresActivity : ComponentActivity() {
                     }
                 ) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
-                        Text(
-                            text = stringResource(R.string.title_activity_directores),
-                            modifier = Modifier.padding(dimensionResource(R.dimen.espacio_1)),
-                            style = MaterialTheme.typography.headlineLarge
-                        )
+
+                        // --- 4. ELIMINAR EL TÍTULO DE AQUÍ (YA ESTÁ ARRIBA) ---
+                        // Text(
+                        //     text = stringResource(R.string.title_activity_directores),
+                        //     modifier = Modifier.padding(dimensionResource(R.dimen.espacio_1)),
+                        //     style = MaterialTheme.typography.headlineLarge
+                        // )
+
                         if (isLoading) {
                             LinearProgressIndicator()
                         } else {
-                            LazyColumn {
+                            LazyColumn(
+                                // Añadimos padding para que no se pegue a la barra
+                                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.espacio_1))
+                            ) {
                                 items(items = listaDirectores) { itemDirector ->
                                     DibujarDirector(
                                         itemDirector,

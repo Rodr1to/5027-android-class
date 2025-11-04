@@ -13,11 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +57,8 @@ object RetrofitDirectoresActualizar {
 }
 
 class DirectoresActualizarActivity : ComponentActivity() {
+
+    @OptIn(ExperimentalMaterial3Api::class) // <-- AÑADIR ANOTACIÓN
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -75,50 +75,80 @@ class DirectoresActualizarActivity : ComponentActivity() {
                 var peliculas by remember { mutableStateOf(vpeliculas) }
                 val api = RetrofitDirectoresActualizar.apiService
 
-                Column (modifier = Modifier
-                    .fillMaxSize()
-                    .padding(dimensionResource(R.dimen.espacio_4)),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center){
-                    Text(text = "Actualizar director",
-                        style = MaterialTheme.typography.headlineLarge)
-                    Spacer(Modifier.height(dimensionResource(R.dimen.espacio_4)))
-                    OutlinedTextField(
-                        label = {Text(text = "Codigo")},
-                        value = iddirector.toString(),
-                        onValueChange = {  },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(Modifier.height(dimensionResource(R.dimen.espacio_4)))
-                    OutlinedTextField(
-                        label = {Text(text = "Nombres")},
-                        value = nombres.toString(),
-                        onValueChange = { nombres = it },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(Modifier.height(dimensionResource(R.dimen.espacio_2)))
-                    OutlinedTextField(
-                        label = {Text(text= "Peliculas")},
-                        value = peliculas.toString(),
-                        onValueChange = { peliculas = it },
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+                // --- AÑADIR SCAFFOLD Y TOPAPPBAR ---
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        TopAppBar(
+                            title = { Text("Actualizar director") },
+                            navigationIcon = {
+                                IconButton(onClick = { finish() }) { // finish() vuelve a la lista
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = "Volver"
+                                    )
+                                }
+                            }
+                        )
+                    }
+                ) { innerPadding ->
+                    // --- FIN DE LA MODIFICACIÓN ---
 
-                    Spacer(Modifier.height(dimensionResource(R.dimen.espacio_2)))
-                    OutlinedButton (onClick = {
-                        lifecycleScope.launch {
-                            val respuesta = api.directoresActualizar(Integer.parseInt(iddirector), nombres.toString(), peliculas.toString())
-                            Toast.makeText(this@DirectoresActualizarActivity,
-                                "Se ha actualizado el director con codigo $iddirector",
-                                Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this@DirectoresActualizarActivity,
-                                DirectoresActivity::class.java))
+                    Column (modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding) // <-- USAR PADDING DEL SCAFFOLD
+                        .padding(dimensionResource(R.dimen.espacio_4)),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ){
+                        // --- ELIMINAR TÍTULO DE AQUÍ ---
+                        // Text(text = "Actualizar director",
+                        //     style = MaterialTheme.typography.headlineLarge)
+                        // Spacer(Modifier.height(dimensionResource(R.dimen.espacio_4)))
+
+                        OutlinedTextField(
+                            label = {Text(text = "Codigo")},
+                            value = iddirector.toString(),
+                            onValueChange = {  },
+                            modifier = Modifier.fillMaxWidth(),
+                            readOnly = true
+                        )
+                        Spacer(Modifier.height(dimensionResource(R.dimen.espacio_4)))
+                        OutlinedTextField(
+                            label = {Text(text = "Nombres")},
+                            value = nombres.toString(),
+                            onValueChange = { nombres = it },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(Modifier.height(dimensionResource(R.dimen.espacio_2)))
+                        OutlinedTextField(
+                            label = {Text(text= "Peliculas")},
+                            value = peliculas.toString(),
+                            onValueChange = { peliculas = it },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+
+                        Spacer(Modifier.height(dimensionResource(R.dimen.espacio_2)))
+                        OutlinedButton (onClick = {
+                            lifecycleScope.launch {
+                                val respuesta = api.directoresActualizar(Integer.parseInt(iddirector), nombres.toString(), peliculas.toString())
+                                Toast.makeText(this@DirectoresActualizarActivity,
+                                    "Se ha actualizado el director con codigo $iddirector",
+                                    Toast.LENGTH_SHORT).show()
+
+                                // --- CORREGIR EL LOOP ---
+                                // Reemplaza esto:
+                                // startActivity(Intent(this@DirectoresActualizarActivity,
+                                //    DirectoresActivity::class.java))
+                                // Con esto:
+                                finish()
+                                // --- FIN DE LA MODIFICACIÓN ---
+                            }
+                        }) {
+                            Text(stringResource(R.string.title_activity_directores_actualizar))
                         }
-                    }) {
-                        Text(stringResource(R.string.title_activity_directores_actualizar))
                     }
                 }
-
             }
         }
     }
